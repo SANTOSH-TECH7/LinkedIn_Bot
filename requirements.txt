@@ -1,0 +1,34 @@
+<<<<<<< HEAD
+selenium==4.18.1
+gspread==5.12.0
+oauth2client==4.1.3
+beautifulsoup4==4.12.3
+requests==2.31.0
+fake-useragent==1.5.1
+pandas==2.2.2
+undetected-chromedriver==3.5.5
+python-dotenv==1.0.1
+selenium-wire==5.1.0
+blinker==1.6.2
+webdriver-manager
+gspread
+oauth2client
+flask
+=======
+selenium==4.18.1
+gspread==5.12.0
+oauth2client==4.1.3
+beautifulsoup4==4.12.3
+requests==2.31.0
+fake-useragent==1.5.1
+pandas==2.2.2
+undetected-chromedriver==3.5.5
+python-dotenv==1.0.1
+selenium-wire==5.1.0
+blinker==1.6.2
+webdriver-manager
+gspread
+oauth2client
+flask
+>>>>>>> 572aaa2412c837774f392d15257369281f01a9c3
+flask-cors
