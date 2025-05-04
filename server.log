@@ -1,0 +1,36 @@
+2025-05-04 12:09:05,370 - __main__ - INFO - Using alternative bot script: linkedin_hr_bot.py
+2025-05-04 12:09:05,373 - __main__ - INFO - Starting server with bot script: linkedin_hr_bot.py
+2025-05-04 12:09:05,440 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.154.71:5000
+2025-05-04 12:09:05,441 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-05-04 12:09:13,309 - werkzeug - INFO - 192.168.154.71 - - [04/May/2025 12:09:13] "GET / HTTP/1.1" 200 -
+2025-05-04 12:09:13,366 - werkzeug - INFO - 192.168.154.71 - - [04/May/2025 12:09:13] "GET /interface.js HTTP/1.1" 200 -
+2025-05-04 12:09:13,522 - werkzeug - INFO - 192.168.154.71 - - [04/May/2025 12:09:13] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-05-04 12:10:18,623 - werkzeug - INFO - 192.168.154.71 - - [04/May/2025 12:10:18] "GET /server-status HTTP/1.1" 200 -
+2025-05-04 12:10:18,635 - __main__ - INFO - Created config file: temp/config_20250504121018.json
+2025-05-04 12:10:18,643 - __main__ - INFO - Executing bot script: linkedin_hr_bot.py
+2025-05-04 12:11:08,523 - __main__ - INFO - Bot stdout: [*] Starting LinkedIn Connection Bot...
+[*] Session started: 20250504_121020
+[*] Debug mode: OFF
+[*] Headless mode: OFF
+[*] Search keyword: 'ml Engineer'
+[*] Max requests: 100
+[*] Adjusted request limit to 100 based on previous activity
+[!] Login error: 'charmap' codec can't encode character '\u2713' in position 1: character maps to <undefined>
+[*] Closing browser...
+[*] Bot session ended.
+
+2025-05-04 12:11:08,524 - __main__ - ERROR - Bot stderr: D:\LinkedIn HR Connector Bot\linkedin_hr_bot.py:1055: DeprecationWarning: [Deprecated][in version 6.0.0]: client_factory will be replaced by gspread.http_client types
+  sheet = setup_gsheet()
+Traceback (most recent call last):
+  File "D:\LinkedIn HR Connector Bot\linkedin_hr_bot.py", line 138, in login
+    print("[\u2713] Login successful!")
+  File "C:\Users\R.SANTOSH\anaconda3\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2713' in position 1: character maps to <undefined>
+
+2025-05-04 12:11:08,525 - __main__ - INFO - Removed config file: temp/config_20250504121018.json
+2025-05-04 12:11:08,526 - werkzeug - INFO - 192.168.154.71 - - [04/May/2025 12:11:08] "POST /run-bot HTTP/1.1" 200 -

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Connection Bot</title>
+    <style>
+        :root {
+            --primary: #0a66c2;
+            --primary-dark: #004182;
+            --secondary: #f5f5f5;
+            --text: #333;
+            --error: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --info: #3498db;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f3f2ef;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+            font-size: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        input[type="password"] {
+            letter-spacing: 0.2em;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .col {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+        
+        #stop-btn {
+            background-color: #e74c3c;
+        }
+        
+        #stop-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .alert-error {
+            background-color: #fdeaea;
+            border-left: 4px solid var(--error);
+            color: #c0392b;
+        }
+        
+        .alert-success {
+            background-color: #eafaf1;
+            border-left: 4px solid var(--success);
+            color: #27ae60;
+        }
+        
+        .alert-warning {
+            background-color: #fef9e7;
+            border-left: 4px solid var(--warning);
+            color: #e67e22;
+        }
+        
+        .alert-info {
+            background-color: #ebf5fb;
+            border-left: 4px solid var(--info);
+            color: #2980b9;
+        }
+        
+        #console {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        #console p {
+            margin: 0;
+            padding: 2px 0;
+        }
+        
+        .console-time {
+            color: #95a5a6;
+            margin-right: 8px;
+            font-size: 0.9em;
+        }
+        
+        .console-info {
+            color: #3498db;
+        }
+        
+        .console-success {
+            color: #2ecc71;
+        }
+        
+        .console-error {
+            color: #e74c3c;
+        }
+        
+        .console-warning {
+            color: #f39c12;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            cursor: help;
+        }
+        
+        .tooltip-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background-color: #95a5a6;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .tooltip-text {
+            visibility: hidden;
+            width: 250px;
+            background-color: #34495e;
+            color: white;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-weight: normal;
+            font-size: 13px;
+            line-height: 1.4;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="logo">LI</div>
+                <div>
+                    <h1>LinkedIn Connection Bot</h1>
+                    <p>Automate your connection requests safely and efficiently</p>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <p><strong>Important:</strong> This tool runs entirely in your browser. Your LinkedIn credentials are never stored or transmitted anywhere.</p>
+            </div>
+
+            <div class="alert alert-warning">
+                <p><strong>Note:</strong> Excessive connection requests may lead to LinkedIn account restrictions. We recommend limiting to 20-30 connections per day.</p>
+            </div>
+
+            <form id="bot-form">
+                <h2>Account Information</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="username">LinkedIn Email</label>
+                            <input type="email" id="username" name="username" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="password">LinkedIn Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>Search Configuration</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="keyword">Search Keyword</label>
+                            <input type="text" id="keyword" name="keyword" placeholder="e.g., ML Engineer, Product Manager" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="location">Location (Optional)</label>
+                            <input type="text" id="location" name="location" placeholder="e.g., San Francisco, London">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="pages">
+                                Number of Pages to Search
+                                <div class="tooltip">
+                                    <span class="tooltip-icon">?</span>
+                                    <span class="tooltip-text">Higher values will search more profiles but take longer. Each page contains about 10 profiles.</span>
+                                </div>
+                            </label>
+                            <input type="number" id="pages" name="pages" min="1" max="100" value="10">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="limit">
+                                Connection Request Limit
+                                <div class="tooltip">
+                                    <span class="tooltip-icon">?</span>
+                                    <span class="tooltip-text">LinkedIn may restrict accounts that send too many requests. We recommend 20-30 per day.</span>
+                                </div>
+                            </label>
+                            <input type="number" id="limit" name="limit" min="1" max="100" value="20">
+                        </div>
+                    </div>
+                </div>
+
+                <h2>Connection Message</h2>
+                <div class="form-group">
+                    <label for="message">
+                        Personalized Message
+                        <div class="tooltip">
+                            <span class="tooltip-icon">?</span>
+                            <span class="tooltip-text">Use {name} to insert the recipient's first name. Keep messages brief and personal for better acceptance rates.</span>
+                        </div>
+                    </label>
+                    <textarea id="message" name="message" placeholder="Hi {name}, I'm exploring opportunities and would love to connect with professionals in your field. Looking forward to learning from your insights!"></textarea>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="headless" name="headless">
+                    <label for="headless">
+                        Run in background (headless mode)
+                        <div class="tooltip">
+                            <span class="tooltip-icon">?</span>
+                            <span class="tooltip-text">When checked, the browser will run invisibly in the background. Uncheck to see the automation in action.</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="buttons">
+                    <button type="button" id="stop-btn" disabled>Stop Bot</button>
+                    <button type="submit" id="start-btn">Start Bot</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card" id="results-section" style="display: none;">
+            <h2>Bot Status</h2>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Progress</span>
+                    <span id="progress-text">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="profiles-scanned">0</div>
+                    <div class="stat-label">Profiles Scanned</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="requests-sent">0</div>
+                    <div class="stat-label">Requests Sent</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="pages-processed">0</div>
+                    <div class="stat-label">Pages Processed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="time-elapsed">0:00</div>
+                    <div class="stat-label">Time Elapsed</div>
+                </div>
+            </div>
+
+            <h2>Console Output</h2>
+            <div id="console"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('bot-form');
+            const startBtn = document.getElementById('start-btn');
+            const stopBtn = document.getElementById('stop-btn');
+            const resultsSection = document.getElementById('results-section');
+            const consoleOutput = document.getElementById('console');
+            const progressBar = document.getElementById('progress-bar-fill');
+            const progressText = document.getElementById('progress-text');
+            
+            // Stats elements
+            const profilesScanned = document.getElementById('profiles-scanned');
+            const requestsSent = document.getElementById('requests-sent');
+            const pagesProcessed = document.getElementById('pages-processed');
+            const timeElapsed = document.getElementById('time-elapsed');
+            
+            let botRunning = false;
+            let startTime;
+            let timerInterval;
+            
+            // Stats tracking
+            let stats = {
+                profilesScanned: 0,
+                requestsSent: 0,
+                pagesProcessed: 0
+            };
+            
+            // Console logging functions
+            function logToConsole(message, type = 'info') {
+                const time = new Date().toLocaleTimeString();
+                const logEntry = document.createElement('p');
+                logEntry.innerHTML = `<span class="console-time">[${time}]</span> <span class="console-${type}">${message}</span>`;
+                consoleOutput.appendChild(logEntry);
+                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            }
+            
+            // Update stats display
+            function updateStats() {
+                profilesScanned.textContent = stats.profilesScanned;
+                requestsSent.textContent = stats.requestsSent;
+                pagesProcessed.textContent = stats.pagesProcessed;
+            }
+            
+            // Update timer
+            function updateTimer() {
+                const now = new Date();
+                const diff = (now - startTime) / 1000; // in seconds
+                
+                const minutes = Math.floor(diff / 60);
+                const seconds = Math.floor(diff % 60);
+                
+                timeElapsed.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Update progress bar
+            function updateProgress(current, total) {
+                const percentage = Math.min(Math.round((current / total) * 100), 100);
+                progressBar.style.width = `${percentage}%`;
+                progressText.textContent = `${percentage}%`;
+            }
+            
+            // Simulate running the bot (for demonstration)
+            function simulateBot(config) {
+                // In a real implementation, this would use Selenium WebDriver or similar
+                // to automate LinkedIn connections
+                
+                logToConsole("Initializing LinkedIn Connection Bot...", "info");
+                logToConsole(`Search keyword: "${config.keyword}"${config.location ? ` in ${config.location}` : ''}`, "info");
+                logToConsole(`Target: ${config.pages} pages, maximum ${config.limit} connection requests`, "info");
+                logToConsole(`Headless mode: ${config.headless ? 'Enabled' : 'Disabled'}`, "info");
+                
+                // For demonstration, show how the real bot would work
+                logToConsole("Setting up web driver...", "info");
+                setTimeout(() => {
+                    logToConsole("Web driver initialized successfully", "success");
+                    logToConsole("Logging into LinkedIn...", "info");
+                    
+                    setTimeout(() => {
+                        logToConsole("Login successful!", "success");
+                        logToConsole("Starting search for profiles...", "info");
+                        
+                        const totalProfiles = Math.min(config.pages * 10, config.limit * 2);
+                        let processedProfiles = 0;
+                        let currentPage = 0;
+                        
+                        // Simulate processing pages
+                        const processNextPage = () => {
+                            if (currentPage >= config.pages || !botRunning) {
+                                if (botRunning) {
+                                    logToConsole("Finished processing all pages!", "success");
+                                    stopBot(true);
+                                }
+                                return;
+                            }
+                            
+                            currentPage++;
+                            stats.pagesProcessed = currentPage;
+                            updateStats();
+                            
+                            logToConsole(`Processing page ${currentPage}/${config.pages}`, "info");
+                            
+                            // Simulate finding profiles on the page
+                            const profilesOnPage = Math.min(10, totalProfiles - processedProfiles);
+                            logToConsole(`Found ${profilesOnPage} profiles on this page`, "info");
+                            
+                            // Simulate processing each profile
+                            let profileIndex = 0;
+                            const processNextProfile = () => {
+                                if (profileIndex >= profilesOnPage || !botRunning || stats.requestsSent >= config.limit) {
+                                    if (stats.requestsSent >= config.limit && botRunning) {
+                                        logToConsole(`Reached connection request limit (${config.limit})`, "warning");
+                                        stopBot(true);
+                                        return;
+                                    }
+                                    
+                                    if (botRunning) {
+                                        // Move to next page
+                                        setTimeout(processNextPage, 1000);
+                                    }
+                                    return;
+                                }
+                                
+                                profileIndex++;
+                                processedProfiles++;
+                                stats.profilesScanned++;
+                                updateStats();
+                                
+                                // Random names for simulation
+                                const names = ["John", "Sarah", "Michael", "Emily", "David", "Jessica", "Alex", "Lisa"];
+                                const name = names[Math.floor(Math.random() * names.length)];
+                                
+                                logToConsole(`Processing profile ${processedProfiles}: ${name}`, "info");
+                                
+                                // Simulate connection success/failure (80% success rate)
+                                setTimeout(() => {
+                                    if (Math.random() < 0.8) {
+                                        stats.requestsSent++;
+                                        updateStats();
+                                        
+                                        const personalizedMessage = config.message.replace('{name}', name);
+                                        logToConsole(`Sent connection request to ${name} with message: "${personalizedMessage}"`, "success");
+                                    } else {
+                                        // Random failures
+                                        const reasons = [
+                                            "No connect button found",
+                                            "Already connected",
+                                            "Connection dialog did not appear",
+                                            "Profile has restricted connections"
+                                        ];
+                                        const reason = reasons[Math.floor(Math.random() * reasons.length)];
+                                        logToConsole(`Could not connect with ${name}: ${reason}`, "error");
+                                    }
+                                    
+                                    // Update progress
+                                    updateProgress(processedProfiles, totalProfiles);
+                                    
+                                    // Process next profile with delay
+                                    setTimeout(processNextProfile, Math.random() * 1000 + 500);
+                                }, Math.random() * 1000 + 500);
+                            };
+                            
+                            // Start processing profiles on this page
+                            processNextProfile();
+                        };
+                        
+                        // Start processing pages
+                        processNextPage();
+                        
+                    }, 2000);
+                }, 1500);
+            }
+            
+            // Start the bot
+            function startBot() {
+                if (botRunning) return;
+                
+                // Get form values
+                const config = {
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value,
+                    keyword: document.getElementById('keyword').value,
+                    location: document.getElementById('location').value,
+                    pages: parseInt(document.getElementById('pages').value),
+                    limit: parseInt(document.getElementById('limit').value),
+                    message: document.getElementById('message').value,
+                    headless: document.getElementById('headless').checked
+                };
+                
+                // Validate form
+                if (!config.username || !config.password || !config.keyword) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                if (!config.message.includes('{name}')) {
+                    alert('Your message should include {name} placeholder to personalize connections');
+                    return;
+                }
+                
+                // Reset stats
+                stats = {
+                    profilesScanned: 0,
+                    requestsSent: 0,
+                    pagesProcessed: 0
+                };
+                updateStats();
+                
+                // Show results section and clear console
+                resultsSection.style.display = 'block';
+                consoleOutput.innerHTML = '';
+                
+                // Update UI state
+                botRunning = true;
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                
+                // Reset progress
+                progressBar.style.width = '0%';
+                progressText.textContent = '0%';
+                
+                // Start timer
+                startTime = new Date();
+                updateTimer();
+                timerInterval = setInterval(updateTimer, 1000);
+                
+                // Scroll to results section
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+                
+                // Actually start the bot
+                // Note: In a real implementation, you would call the actual bot code here
+                // For this demo, we're simulating the bot's behavior
+                simulateBot(config);
+            }
+            
+            // Stop the bot
+            function stopBot(completed = false) {
+                if (!botRunning) return;
+                
+                botRunning = false;
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                
+                clearInterval(timerInterval);
+                
+                if (!completed) {
+                    logToConsole("Bot stopped by user", "warning");
+                } else {
+                    logToConsole("Bot execution completed", "success");
+                    logToConsole(`Final stats: ${stats.requestsSent} connections sent, ${stats.profilesScanned} profiles scanned, ${stats.pagesProcessed} pages processed`, "info");
+                }
+            }
+            
+            // Event listeners
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                startBot();
+            });
+            
+            stopBtn.addEventListener('click', function() {
+                stopBot();
+            });
+            
+            // Show a warning when user is about to leave the page while bot is running
+            window.addEventListener('beforeunload', function(e) {
+                if (botRunning) {
+                    e.preventDefault();
+                    e.returnValue = 'The bot is still running. Are you sure you want to leave?';
+                    return e.returnValue;
+                }
+            });
+        });
+    </script>
+
+    <!-- Note: In a real implementation, you would include Selenium and other required libraries -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/selenium-webdriver@4.8.0/index.js"></script> -->
+    <script src="interface.js"></script>
+</body>
+</html>

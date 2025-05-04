@@ -19,11 +19,11 @@ from datetime import datetime
 # =================== CONFIG ===================
 LINKEDIN_USERNAME = 'santosh88386r@gmail.com'
 LINKEDIN_PASSWORD = 'sanrs@1804'
-SEARCH_KEYWORD = 'ml Engineer'
+SEARCH_KEYWORD = 'GenAI Engineer'
 NUM_PAGES = 30  # Increased to find more potential connections
 MAX_REQUESTS = 100  # Limiting to 100 connections
 MAX_REQUESTS_PER_PAGE = 10  # Limit requests per page to avoid detection
-MESSAGE = "Hi {name}, I'm exploring opportunities and would love to connect with professionals in ML Engineering. Looking forward to learning from your insights!"
+MESSAGE = "Hi {name}, I'm currently exploring opportunities in Generative AI and would love to connect with professionals in this space. Looking forward to learning from your experience and insights in ML and GenAI engineering!"
 HEADLESS = False  # Set to True for headless operation, False to see the browser
 DAILY_REQUEST_LIMIT = 100  # LinkedIn's recommended limit is around 80-100 per day
 DEBUG_MODE = False  # Set to True to enable debug screenshots and verbose logging
